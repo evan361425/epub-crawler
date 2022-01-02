@@ -5,27 +5,27 @@ title="$2"
 
 echo "Start parsing $file..."
 
-jq -r '.title' "$file.jl" | \
-  sed 's/\..*//' > "temp.index.txt"
-
-# jq -r '.title' "$file.jl" | \
-#   awk '{print $1}' | \
-#   cut -c 2- | \
-#   rev | \
-#   cut -c 2- | \
-#   rev > "temp.index.txt"
-
-paste -d' ' <(cat temp.index.txt) <(cat "$file.jl") > "$file.index.txt"
-
 echo "Title $title..."
 printf "%% %s\n" "$title" > "$file.txt"
 
-sort -n "$file.index.txt" | \
+function 69shu() {
+  jq -r '.title' "$file.jl" | \
+    sed 's/\..*//'
+}
+
+function wfxs() {
+  jq -r '.title' "$file.jl" | \
+    awk '{print $1}' | \
+    cut -c 2- | \
+    rev | \
+    cut -c 2- | \
+    rev
+}
+
+paste -d' ' <(69shu) <(cat "$file.jl") | \
+  sort -n | \
   sed 's/^[0-9]* //' | \
   jq -r '("\n# " + .title + "\n\n" + .content + "\n")' \
   >> "$file.txt"
 
 opencc -i "$file.txt" -c s2twp.json | pandoc -o "$title.epub"
-
-rm temp.index.txt
-rm "$file.index.txt"
