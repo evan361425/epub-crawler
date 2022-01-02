@@ -6,11 +6,14 @@ title="$2"
 echo "Start parsing $file..."
 
 jq -r '.title' "$file.jl" | \
-  awk '{print $1}' | \
-  cut -c 2- | \
-  rev | \
-  cut -c 2- | \
-  rev > "temp.index.txt"
+  sed 's/\..*//' > "temp.index.txt"
+
+# jq -r '.title' "$file.jl" | \
+#   awk '{print $1}' | \
+#   cut -c 2- | \
+#   rev | \
+#   cut -c 2- | \
+#   rev > "temp.index.txt"
 
 paste -d' ' <(cat temp.index.txt) <(cat "$file.jl") > "$file.index.txt"
 
@@ -22,7 +25,7 @@ sort -n "$file.index.txt" | \
   jq -r '("\n# " + .title + "\n\n" + .content + "\n")' \
   >> "$file.txt"
 
-pandoc "$file.txt" -o "$title.epub"
+opencc -i "$file.txt" -c s2twp.json | pandoc -o "$title.epub"
 
 rm temp.index.txt
 rm "$file.index.txt"
