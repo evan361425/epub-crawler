@@ -22,9 +22,8 @@ function wfxs() {
     rev
 }
 
-paste -d' ' <(69shu) <(cat "$file.jl") | \
-  sort -n | \
-  sed 's/^[0-9]* //' | \
+# sed 's/^[0-9]* //' | \
+sort --version-sort "$file.jl" | \
   jq -r '("\n# " + .title + "\n\n" + .content + "\n")' \
   >> "$file.txt"
 
