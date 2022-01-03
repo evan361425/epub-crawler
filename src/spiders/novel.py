@@ -1,6 +1,5 @@
 import scrapy
-
-# from tqdm import tqdm
+import tqdm
 
 
 class Parser:
@@ -75,4 +74,9 @@ class NovelSpider(scrapy.Spider):
             if self.limit is not None and self.limit <= counter:
                 print(f"Exec {counter} and break!")
                 break
-        # self.pbar = tqdm(total=counter)
+        self.pbar = tqdm(total=counter)
+
+
+if __name__ == "__main__":
+    print(scrapy.__version__)
+    print(tqdm.__version__)
