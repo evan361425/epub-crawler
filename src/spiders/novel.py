@@ -58,6 +58,18 @@ class NovelSpider(scrapy.Spider):
             title="h1::text",
             content="#booktxt p::text",
         ),
+        "twfanti": Parser(
+            site="https://m.twfanti.com/{0}/dir.html/",
+            pages=".chapter-list a::attr(href)",
+            title=".size18.w100.text-center.lh100.pt30.pb15::text",
+            content="#pt-pop p::text",
+        ),
+        "fantinovels": Parser(
+            site="https://m.fantinovels.com/twlist/{0}/dir.html",
+            pages=".chapter-list a::attr(href)",
+            title=".size18.w100.text-center.lh100.pt30.pb15::text",
+            content="#pt-pop p::text",
+        ),
     }
     total = 0
     processed = 0
@@ -115,8 +127,8 @@ class NovelSpider(scrapy.Spider):
                 print(f"Exec {self.total} and break!")
                 break
 
-        print(self.parser.next)
         if self.parser.next is not None:
+            print(self.parser.next)
             href = response.css(self.parser.next).get()
             link = response.urljoin(href)
             if link.startswith("http"):
