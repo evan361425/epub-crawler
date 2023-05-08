@@ -6,29 +6,27 @@ class Parser:
         self.filename = filename
 
     def start(self):
-        finishDescription = False
-        with open(f"{self.filename}.epub.txt", "w") as output:
-            self.output = output
-            with open(f"{self.filename}.txt") as input:
-                for line in input:
-                    if not finishDescription:
-                        if not self.parseDescription(line):
-                            finishDescription = True
+        finish_description = False
+        with open(f"{self.filename}.epub.txt", "w", encoding="utf-8") as output:
+            with open(f"{self.filename}.txt", encoding="utf-8") as lines:
+                for line in lines:
+                    if not finish_description:
+                        if not self.parseDescription(line, output):
+                            finish_description = True
                     else:
-                        self.parseContent(line)
+                        self.parseContent(line, output)
 
-    def parseDescription(self, line: str):
+    def parseDescription(self, line: str, output):
         if line != "---\n":
-            self.output.write(line)
+            output.write(line)
             return True
-        else:
-            return False
+        return False
 
-    def parseContent(self, line: str):
+    def parseContent(self, line: str, output):
         if line[0].isspace():
-            self.output.write(line.lstrip())
+            output.write(line.lstrip())
         else:
-            self.output.write(f"\n# {line}\n")
+            output.write(f"\n# {line}\n")
 
 
 if __name__ == "__main__":
